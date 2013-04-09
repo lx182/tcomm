@@ -7,7 +7,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   <title>Tcomm</title>
   <link rel="stylesheet" href="https://s3.amazonaws.com/codiqa-cdn/mobile/1.2.0/jquery.mobile-1.2.0.min.css" />
-  <link rel="stylesheet" href="css/my.css" />
+  <link rel="stylesheet" href="css/tcom.css" />
   <script src="https://s3.amazonaws.com/codiqa-cdn/jquery-1.7.2.min.js"></script>
   <script src="https://s3.amazonaws.com/codiqa-cdn/mobile/1.2.0/jquery.mobile-1.2.0.min.js"></script>
   <script src="js/my.js"></script>
@@ -16,7 +16,65 @@
   <style>
     
   </style>
+  
+  <script>
+    function logIcon(confirmar) {
+        $.mobile.loading('show', {
+            text: 'Inciando sesión ...',
+            textVisible: confirmar,
+            theme: 'c',
+            html: ""
+        });
 
+    }
+
+    $(function () {
+
+        $("#cerrar").click(function(){
+            window.localStorage.clear();
+            
+        });
+        $("#login").submit(function () {
+
+            logIcon("true");
+            
+            $.post('http://tcommdev.tesconmedia.com/server.php/usuarios/idUsuario_nombreUsuario', $("#login").serialize(), function (response) {
+                //Guardar resultado de servidor (id o false)
+				
+                if (response == false) {
+                    alert("Error usuario o contraseña erroneos");
+                    logIcon("false");
+                }
+                else {
+                    
+                    window.localStorage.setItem("id", response[0].idUsuario);
+                    window.localStorage.setItem("tipo", response[0].tipoUsuario);
+                    window.localStorage.setItem("nombre", response[0].usuario);
+                    window.location = "#page3";
+                    $('#nombre').html(window.localStorage.getItem("nombre"));
+                    id = window.localStorage.getItem("id");
+                    $.getJSON("http://tcommdev.tesconmedia.com/server.php/mensajes/contenido/"+id, function(data){
+                        alert("Worl");
+                        $.each(data, function(i,item){
+                           var ii = i+1; 
+                           var uno = $('<li />').attr("data-theme","c").attr("data-filtertext",item.mensaje).appendTo("#notify");
+                           var dos = $("<a />").attr("data-transition","slide").attr("href","#page9").html(item.nombre).appendTo(uno);
+                           var tres = $("<span />").attr("class","ui-li-count").html(item.mensaje).appendTo(dos);
+
+                         });
+                        
+                     });
+                }
+
+                
+            }, 'json').done(function(){
+            $("#notify").trigger("create");
+            });
+            
+            return false;
+        });
+    });
+</script>
   <!-- User-generated js -->
   <script>
 
@@ -29,33 +87,37 @@
 <body>
   <!-- Home -->
   <div data-role="page" id="page1">
+      
       <div data-role="content">
-          <div style="">
-              <img style="width: 100%; height: px" src="http://assets.codiqa.com/N1XPbQDmaAluuGuX3YgS_logo.png">
-          </div>
-          <div data-role="fieldcontain">
-              <fieldset data-role="controlgroup">
-                  <label for="textinput3">
-                  </label>
-                  <input name="" id="textinput3" placeholder="Correo" value="" type="text">
-              </fieldset>
-          </div>
-          <div data-role="fieldcontain">
-              <fieldset data-role="controlgroup">
-                  <label for="textinput4">
-                  </label>
-                  <input name="" id="textinput4" placeholder="Contraseña" value="" type="password">
-              </fieldset>
-          </div>
-          <a data-role="button" href="#page3">
-              Entrar
-          </a>
+          
+                <div style="">
+                    <img style="width: 100%; height: px" src="http://assets.codiqa.com/N1XPbQDmaAluuGuX3YgS_logo.png">
+                </div>
+          <form id="login">
+                <div data-role="fieldcontain">
+                    <fieldset data-role="controlgroup">
+                        <label for="correo">
+                        </label>
+                        <input name="correo" id="correo" placeholder="Correo" value="" type="text">
+                    </fieldset>
+                </div>
+                <div data-role="fieldcontain">
+                    <fieldset data-role="controlgroup">
+                        <label for="contrasena">
+                        </label>
+                        <input name="contrasena" id="contrasena" placeholder="Contraseña" value="" type="password">
+                    </fieldset>
+                </div>
+                <input type="submit" value="Entrar" /></form>
+             
       </div>
+                
+
   </div>
   <!-- Reservaciones -->
   <div data-role="page" id="page4">
-      <div data-theme="a" data-role="header">
-          <a data-role="button" data-theme="a" href="#page3" data-icon="home" data-iconpos="left"
+      <div data-theme="c" data-role="header">
+          <a data-role="button" data-theme="c" href="#page3" data-icon="home" data-iconpos="left"
           class="ui-btn-right">
               Home
           </a>
@@ -122,13 +184,13 @@
   </div>
   <!-- Menu -->
   <div data-role="page" id="page3">
-      <div data-theme="a" data-role="header">
-          <a data-role="button" href="#page3" data-icon="delete" data-iconpos="left"
+      <div data-theme="c" data-role="header">
+          <a id="cerrar" data-role="button" href="#page1" data-icon="delete" data-iconpos="left"
           class="ui-btn-left">
               Salir
           </a>
           <h3>
-              Tcomm
+              <span id="nombre"></span>
           </h3>
       </div>
       <div data-role="content">
@@ -155,14 +217,14 @@
               </li>
           </ul>
       </div>
-      <div data-theme="a" data-role="footer" data-position="fixed">
+      <div data-theme="c" data-role="footer" data-position="fixed">
           <span class="ui-title">
           </span>
       </div>
   </div>
   <!-- Buscar empleados -->
   <div data-role="page" id="page5">
-      <div data-theme="a" data-role="header" data-position="fixed">
+      <div data-theme="c" data-role="header" data-position="fixed">
           <a data-role="button" href="#page1" data-icon="home" data-iconpos="notext"
           class="ui-btn-right">
               Button
@@ -232,7 +294,7 @@
   </div>
   <!-- Ficha empleado -->
   <div data-role="page" id="page6">
-      <div data-theme="a" data-role="header">
+      <div data-theme="c" data-role="header">
           <a data-role="button" href="#page3" data-icon="home" data-iconpos="notext"
           class="ui-btn-right">
               Inicio
@@ -302,7 +364,7 @@
   </div>
   <!-- Alberca -->
   <div data-role="page" id="page7">
-      <div data-theme="a" data-role="header">
+      <div data-theme="c" data-role="header">
           <a data-role="button" href="#page3" data-icon="home" data-iconpos="left"
           class="ui-btn-right">
               Home
@@ -313,7 +375,7 @@
           <div data-role="navbar" data-iconpos="top">
               <ul>
                   <li>
-                      <a href="#page4" data-transition="fade" data-theme="a" data-icon="">
+                      <a href="#page4" data-transition="fade" data-theme="c" data-icon="">
                           Reservaciones
                       </a>
                   </li>
@@ -346,12 +408,12 @@
                   <input name="" id="textinput2" placeholder="Hora" value="" type="text">
               </fieldset>
           </div>
-          <input type="submit" data-theme="a" value="Enviar solicitud">
+          <input type="submit" data-theme="c" value="Enviar solicitud">
       </div>
   </div>
   <!-- Notificaciones -->
   <div data-role="page" id="page8">
-      <div data-theme="a" data-role="header">
+      <div data-theme="c" data-role="header">
           <a data-role="button" href="#page3" data-icon="home" data-iconpos="notext"
           class="ui-btn-right">
               Button
@@ -380,7 +442,7 @@
                   </b>
               </p>
           </div>
-          <ul data-role="listview" data-divider-theme="b" data-inset="false">
+          <ul id="notify" data-role="listview" data-divider-theme="b" data-inset="false">
               <li data-theme="c">
                   <a href="#page9" data-transition="slide">
                       Notificación 1
@@ -389,52 +451,12 @@
                       </span>
                   </a>
               </li>
-              <li data-theme="c">
-                  <a href="#page9" data-transition="slide">
-                      Notificación 2
-                      <span class="ui-li-count">
-                          Venta de lotes en ...
-                      </span>
-                  </a>
-              </li>
-              <li data-theme="c">
-                  <a href="#page9" data-transition="slide">
-                      Notificación 3
-                      <span class="ui-li-count">
-                          Cuidado con los visit...
-                      </span>
-                  </a>
-              </li>
-              <li data-theme="c">
-                  <a href="#page9" data-transition="slide">
-                      Notificación 4
-                      <span class="ui-li-count">
-                          XV años de Rita
-                      </span>
-                  </a>
-              </li>
-              <li data-theme="c">
-                  <a href="#page9" data-transition="slide">
-                      Notificación 5
-                      <span class="ui-li-count">
-                          Comite ejecutivo
-                      </span>
-                  </a>
-              </li>
-              <li data-theme="c">
-                  <a href="#page9" data-transition="slide">
-                      Notificación 6
-                      <span class="ui-li-count">
-                          Aguascalientes
-                      </span>
-                  </a>
-              </li>
           </ul>
       </div>
   </div>
   <!-- Notificación -->
   <div data-role="page" id="page9">
-      <div data-theme="a" data-role="header">
+      <div data-theme="c" data-role="header">
           <a data-role="button" href="#page3" data-icon="home" data-iconpos="notext"
           class="ui-btn-right">
               Button
@@ -495,7 +517,7 @@
   </div>
   <!-- Eventos -->
   <div data-role="page" id="page10">
-      <div data-theme="a" data-role="header">
+      <div data-theme="c" data-role="header">
           <a data-role="button" href="#page1" data-icon="home" data-iconpos="left"
           class="ui-btn-right">
               Home
@@ -523,7 +545,7 @@
               </li>
           </ul>
       </div>
-      <div data-role="tabbar" data-iconpos="top" data-theme="a">
+      <div data-role="tabbar" data-iconpos="top" data-theme="c">
           <ul>
               <li>
                   <a href="#page10" data-transition="fade" data-theme="" data-icon="">
@@ -545,7 +567,7 @@
   </div>
   <!-- Eventos_Privados -->
   <div data-role="page" id="page11">
-      <div data-theme="a" data-role="header">
+      <div data-theme="c" data-role="header">
           <a data-role="button" data-direction="reverse" data-rel="back" href="#page1"
           data-icon="home" data-iconpos="left" class="ui-btn-right">
               Home
@@ -576,7 +598,7 @@
               </li>
           </ul>
       </div>
-      <div data-role="tabbar" data-iconpos="top" data-theme="a">
+      <div data-role="tabbar" data-iconpos="top" data-theme="c">
           <ul>
               <li>
                   <a href="#page10" data-transition="fade" data-theme="" data-icon="">
@@ -598,7 +620,7 @@
   </div>
   <!-- Eventos_Crear -->
   <div data-role="page" id="page12">
-      <div data-theme="a" data-role="header">
+      <div data-theme="c" data-role="header">
           <a data-role="button" data-direction="reverse" data-rel="back" href="#page1"
           data-icon="home" data-iconpos="left" class="ui-btn-right">
               Home
@@ -648,7 +670,7 @@
   </div>
   <!-- Reservaciones_idusuario -->
   <div data-role="page" id="page13">
-      <div data-theme="a" data-role="header">
+      <div data-theme="c" data-role="header">
           <h3>
               Tcomm
           </h3>
@@ -673,13 +695,13 @@
                   <h3>
                       Mañana
                   </h3>
-                  <a data-role="button" data-theme="a" href="#page13" data-icon="minus"
+                  <a data-role="button" data-theme="c" href="#page13" data-icon="minus"
                   data-iconpos="notext">
                       Cancelar
                   </a>
               </div>
           </div>
-          <a data-role="button" data-theme="a" href="#page13" data-icon="gear" data-iconpos="left">
+          <a data-role="button" data-theme="c" href="#page13" data-icon="gear" data-iconpos="left">
               Editar
           </a>
           <a data-role="button" href="#page13" data-icon="plus" data-iconpos="left">
