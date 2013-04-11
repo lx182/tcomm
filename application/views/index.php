@@ -301,7 +301,7 @@
   </div>
   <!-- Reservaciones -->
   <div data-role="page" id="reservaciones">
-      <div data-theme="a" data-role="header">
+      <div data-theme="c" data-role="header">
           <h3>
               Tcomm
           </h3>
@@ -319,7 +319,7 @@
           <div id="fechas_reservacion" data-role="collapsible-set">
               
           </div>
-          <a id="editar" data-role="button" data-theme="a" data-icon="gear" data-iconpos="left">
+          <a id="editar" data-role="button" data-theme="c" data-icon="gear" data-iconpos="left">
               Editar
           </a>
           <a data-role="button" href="#nueva_reservacion" data-icon="plus" data-iconpos="left">
@@ -328,7 +328,7 @@
       </div>
   </div>
   <div data-role="page" id="nueva_reservacion">
-      <div data-theme="a" data-role="header">
+      <div data-theme="c" data-role="header">
           <a data-role="button" data-theme="a" href="#menu" data-icon="home" data-iconpos="left"
           class="ui-btn-right">
               Home
@@ -347,7 +347,7 @@
           </div>
       </div>
       <div data-role="content">
-          <ul id="lista_amenidades" data-role="listview" data-divider-theme="d" data-inset="false">
+          <ul id="lista_amenidades" data-role="listview" data-divider-theme="c" data-inset="false">
               <li data-role="list-divider" role="heading">
                   Amenidades
               </li>
