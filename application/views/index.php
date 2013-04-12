@@ -54,7 +54,7 @@
                     $('#nombre').html(window.localStorage.getItem("nombre"));
                     id = window.localStorage.getItem("id");
                     $.getJSON("http://tcommdev.tesconmedia.com/server.php/mensajes/contenido/"+id, function(data){
-                        alert("Worl");
+//                        alert("Worl");
                         $.each(data, function(i,item){
                            var ii = i+1; 
                            var uno = $('<li />').attr("data-theme","c").attr("data-filtertext",item.mensaje).appendTo("#notify");
@@ -63,15 +63,30 @@
 
                          });
                         
+                     }).done(function(){
+                        $("#notify").trigger("create");
                      });
                 }
 
                 
-            }, 'json').done(function(){
-            $("#notify").trigger("create");
-            });
+            }, 'json');
             
             return false;
+        });
+        
+        $("#btn_eventos").click(function(e){
+            $.getJSON("http://tcommdev.tesconmedia.com/server.php/eventos/get_eventos", function(data){
+//                        alert("Worl");
+                        $("#lista-eventos").empty();
+                        $.each(data, function(i,item){
+                           var ii = i+1; 
+                           var uno = $('<li />').attr("data-theme","c").appendTo("#lista-eventos");
+                           var dos = $("<a />").attr("data-transition","slide").attr("href","#").html(item.descripcionEvento).appendTo(uno);
+                           var tres = $("<span />").attr("class","ui-li-count").html(item.fechaHoraInicio).appendTo(dos);
+
+                         });
+                        $("#lista-eventos").listview("refresh");
+                     });
         });
     });
 </script>
@@ -98,7 +113,7 @@
                     <fieldset data-role="controlgroup">
                         <label for="correo">
                         </label>
-                        <input name="correo" id="correo" placeholder="Correo" value="" type="text">
+                        <input name="correo" id="correo" placeholder="Correo" value="" type="email">
                     </fieldset>
                 </div>
                 <div data-role="fieldcontain">
@@ -196,7 +211,7 @@
       <div data-role="content">
           <ul data-role="listview" data-divider-theme="b" data-inset="false">
               <li data-theme="c">
-                  <a href="#page10" data-transition="slide">
+                  <a href="#page10" id="btn_eventos" data-transition="slide">
                       Eventos
                   </a>
               </li>
@@ -531,37 +546,15 @@
           </h3>
       </div>
       <div data-role="content">
-          <div style=" text-align:center">
-              <img style="width: 100%; height: px" src="http://assets.codiqa.com/ABaKqIluTHqhbb4gaIEB_jquery-ui-datepicker.jpg">
-          </div>
-          <ul data-role="listview" data-divider-theme="b" data-inset="false">
-              <li data-theme="c">
+          <ul id="lista-eventos" data-role="listview" data-divider-theme="b" data-inset="false">
+<!--              <li data-theme="c">
                   <a href="#page1" data-transition="slide">
                       Junta vecinal
                       <span class="ui-li-count">
                           13-05-2013
                       </span>
                   </a>
-              </li>
-          </ul>
-      </div>
-      <div data-role="tabbar" data-iconpos="top" data-theme="c">
-          <ul>
-              <li>
-                  <a href="#page10" data-transition="fade" data-theme="" data-icon="">
-                      Internos
-                  </a>
-              </li>
-              <li>
-                  <a href="#" data-transition="fade" data-theme="" data-icon="">
-                      Externos
-                  </a>
-              </li>
-              <li>
-                  <a href="#page11" data-transition="fade" data-theme="" data-icon="">
-                      Propios
-                  </a>
-              </li>
+              </li>-->
           </ul>
       </div>
   </div>
