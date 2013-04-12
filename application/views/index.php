@@ -29,11 +29,12 @@
     }
 
     $(function () {
-        $("#btn_reservaciones").click(function(){
+        $(".btn_reservaciones").click(function(){
         $("#fechas_reservacion").empty();
             $.getJSON("http://tcommdev.tesconmedia.com/server.php/reservaciones/reservacion_by_idUsuario?X-API-KEY=android&idUsuario=" + id + "", 
                 function(json){
                     var hoy = new Date();
+                    $("<input />").attr("id","idUsuario").attr("name","idUsuario").attr("type","hidden").attr("value",id).appendTo("#inputs_fechas");
                     var mes = 0;
                     var dia = 0;
                     if(hoy.getMonth() < 10)
@@ -60,7 +61,6 @@
                             h3.appendTo(divcollap);
                             $("#fechas_reservacion").append(divcollap);
                         }
-                        alert(today);
                         var reservacion = $("<span />").attr("id","reservacion_" + item.idApartado).html(item.articulo + " De: " + item.horaInicio + " a: " + item.horaFinal);
                         var eliminar = $("<a />").attr("id",item.idApartado).attr("href","#").addClass("eliminar").attr("data-role","button").attr("data-theme","a").attr("data-icon","minus").attr("data-iconpos","notext");
                         reservacion.append("<br />");
@@ -273,7 +273,7 @@
                   </a>
               </li>
               <li data-theme="c">
-                  <a id="btn_reservaciones" href="#reservaciones" data-transition="slide">
+                  <a class="btn_reservaciones" href="#reservaciones" data-transition="slide">
                       Reservaciones
                   </a>
               </li>
@@ -329,7 +329,7 @@
   </div>
   <div data-role="page" id="nueva_reservacion">
       <div data-theme="c" data-role="header">
-          <a data-role="button" data-theme="a" href="#menu" data-icon="home" data-iconpos="left"
+          <a data-role="button" data-theme="c" href="#menu" data-icon="home" data-iconpos="left"
           class="ui-btn-right">
               Home
           </a>
@@ -339,7 +339,7 @@
           <div data-role="navbar" data-iconpos="left">
               <ul>
                   <li>
-                      <a href="#reservaciones" data-transition="fade" data-theme="" data-icon="" class="ui-state-persist">
+                      <a class="btn_reservaciones" href="#reservaciones" data-transition="fade" data-theme="" data-icon="" class="ui-state-persist">
                           Reservaciones
                       </a>
                   </li>
@@ -356,7 +356,7 @@
   </div>
   <!-- Camaras -->
   <div data-role="page" id="camaras">
-      <div data-theme="a" data-role="header">
+      <div data-theme="c" data-role="header">
           <h3>
               Tcomm
           </h3>
@@ -375,7 +375,7 @@
   </div>
   <!-- Amenidades -->
   <div data-role="page" id="amenidad">
-      <div data-theme="a" data-role="header">
+      <div data-theme="c" data-role="header">
           <a data-role="button" href="#menu" data-icon="home" data-iconpos="left"
           class="ui-btn-right">
               Home
@@ -386,7 +386,7 @@
           <div data-role="navbar" data-iconpos="top">
               <ul>
                   <li>
-                      <a href="#reservaciones" data-transition="fade" data-theme="a" data-icon="">
+                      <a class="btn_reservaciones" href="#reservaciones" data-transition="fade" data-theme="c" data-icon="">
                           Reservaciones
                       </a>
                   </li>
@@ -400,12 +400,12 @@
                 </fieldset>
             </div>
             <div id="fechas" data-role="fieldcontain">
-                <fieldset data-role="controlgroup">
+                <fieldset id="inputs_fechas" data-role="controlgroup">
                     <input name="fechaHoraInicio" id="fechaHoraInicio" placeholder="Fecha de inicio" type="datetime" /><br /><br />
                     <input name="fechaHoraFinal" id="fechaHoraFinal" placeholder="Fecha de finalización" type="datetime" />
                 </fieldset>
             </div>
-            <input type="submit" data-theme="a" value="Enviar solicitud">
+            <input type="submit" data-theme="c" value="Enviar solicitud">
           </form>
       </div>
   </div>
