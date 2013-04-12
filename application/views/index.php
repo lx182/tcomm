@@ -449,7 +449,7 @@
   <!-- Reservaciones -->
   <div data-role="page" id="reservaciones">
       <div data-theme="c" data-role="header">
-                      <a data-role="button" href="#page5" data-icon="arrow-l" data-iconpos="left"
+                      <a data-role="button" href="#page3" data-icon="arrow-l" data-iconpos="left"
                           class="ui-btn-left">
                           Volver
                       </a>
@@ -508,7 +508,7 @@
   <!-- Camaras -->
   <div data-role="page" id="camaras">
       <div data-theme="c" data-role="header">
-                      <a data-role="button" href="#page5" data-icon="arrow-l" data-iconpos="left"
+                      <a data-role="button" href="#page3" data-icon="arrow-l" data-iconpos="left"
                           class="ui-btn-left">
                           Volver
                       </a>
