@@ -1,0 +1,3 @@
+/application/libraries/
+!/application/config/config.php
+/application/config/
