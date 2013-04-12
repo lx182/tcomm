@@ -420,7 +420,7 @@
               </li>
               <li data-theme="c">
                   <a id="btn_camaras" href="#camaras" data-transition="slide">
-                      Camaras
+                      Cámaras
                   </a>
               </li>
               <li data-theme="c">
@@ -519,7 +519,7 @@
               <ul>
                   <li>
                       <a href="#camaras" data-transition="fade" class="ui-btn-active ui-state-persist">
-                          Camaras
+                          Cámaras
                       </a>
                   </li>
               </ul>
