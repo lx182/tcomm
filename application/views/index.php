@@ -18,6 +18,7 @@
   </style>
   
   <script>
+     
       var id;
     function logIcon(confirmar) {
         $.mobile.loading('show', {
@@ -28,8 +29,131 @@
         });
 
     }
+    
+            
+
 
     $(function () {
+        
+        $("#propiedad").submit(function () {
+                
+                
+                $.ajax({
+                    
+                
+                    type: 'POST',
+                    url: 'http://tcommdev.tesconmedia.com/server.php/unidadesMoviles/unidadMovil',
+                    crossDomain: true,
+                    data: $('#propiedad').serialize(),
+                    dataType: 'json',
+                    success: function (responseData, textStatus, jqXHR) {
+                        alert('Registro de unidad móvil satisfactoria');
+                        $("#descripcionMovil").val("");
+                        $("#placas").val("");
+                    },
+                    error: function (responseData, textStatus, errorThrown) {
+                        alert('Ha fallado el registro de unidad móvil');
+                        $("#descripcionMovil").val("");
+                        $("#placas").val("");
+                        
+                        
+                    }
+                });
+                return false;
+            }
+            );//
+         $(".btn_notify").click(function (){
+             
+                    $.mobile.loading( 'show', {
+                            text: 'foo',
+                            textVisible: false,
+                            theme: 'z',
+                            html: ""
+                    });
+                    $("#notify").empty();
+                    $.getJSON("http://tcommdev.tesconmedia.com/server.php/mensajes/contenido/"+id, function(data){
+                        
+                        $.each(data, function(i,item){
+                           var ii = i+1; 
+                           var idn = item.id;
+                           var uno = $('<li />').attr("data-theme","c").attr("data-filtertext",item.nombre+" "+item.mensaje);
+                           var dos = $("<a />").attr("data-transition","slide").html(item.nombre).appendTo(uno).on('click',function(){
+                                $("#nombren").html(item.nombre);
+                                $("#nombrep").html(item.nombre);
+                                $("#fecha").html(item.fecha);
+                                $("#cuerpo").html(item.mensaje);
+
+                            }).attr("href","#page9");
+                           var tres = $("<span />").attr("class","ui-li-count").html(item.mensaje).appendTo(dos);
+
+                        $("#notify").append(uno).listview('refresh');
+                        $.mobile.hidePageLoadingMsg();
+                         });
+                        
+                     });
+                     
+        });//Termino de Notificaciones
+        $(".btn_employ").click(function (){
+                     $.mobile.loading( 'show', {
+                            text: 'foo',
+                            textVisible: false,
+                            theme: 'z',
+                            html: ""
+                    });
+                    $("#ls_employs").empty();
+                    $.getJSON("http://tcommdev.tesconmedia.com/server.php/empleados/empleado", function(data){
+                        
+                        $.each(data, function(i,item){
+                           var ii = i+1; 
+                           var idn = item.id;
+                           var uno = $('<li />').attr("data-theme","c").attr("data-filtertext",item.nombreEmpresa+" "+item.nombrePersona+" "+item.apellidoPatPersona+" "+item.apellidoMatPersona);
+                           var dos = $("<a />").attr("data-transition","slide").html(item.nombreEmpresa).appendTo(uno).on('click',function(){
+                                $("#nomemp").html(item.nombrePersona);
+                                $("#nomempf").html(item.nombrePersona+" "+item.apellidoPatPersona+" "+item.apellidoMatPersona);
+                                $("#tel").html(item.telefonoPersona+" ext"+item.extensionPersona+" / "+item.celularPersona);
+                                $("#mailem").html(item.correoPersona);
+                                $("#diremp").html(item.direccionPersona);
+                                $("#datemp").html(item.fechaNacimiento);
+
+                            }).attr("href","#page6");
+                           var tres = $("<span />").attr("class","ui-li-count").html(item.nombrePersona+" "+item.apellidoPatPersona+" "+item.apellidoMatPersona).appendTo(dos);
+                           $.mobile.hidePageLoadingMsg(); 
+                        $("#ls_employs").append(uno).listview('refresh');
+                         });
+                        
+                     });
+                     
+        });//Termino de Notificaciones
+        
+        $(".btn_prop").click(function (){
+            
+                     $.mobile.loading( 'show', {
+                            text: 'foo',
+                            textVisible: false,
+                            theme: 'z',
+                            html: ""
+                    });
+                    $("#prop").empty();
+                    $.getJSON("http://tcommdev.tesconmedia.com/server.php/unidadesMoviles/unidadMovil?idUsuario="+id, function(data){
+                        
+                        $.each(data, function(i,item){
+                           var ii = i+1; 
+                           var idn = item.id;
+                           var uno = $('<li />').attr("data-theme","c").attr("data-filtertext",item.descripcionMovil+" "+item.placas);
+                           var dos = $("<a />").attr("data-transition","slide").html(item.descripcionMovil).appendTo(uno).on('click',function(){
+                                $("#propn").html(item.placa);
+                                $("#propplac").html(item.placa);
+                                $("#propdes").html(item.descripcionMovil);
+
+                            }).attr("href","#detalles");
+                           var tres = $("<span />").attr("class","ui-li-count").html(item.placas).appendTo(dos);
+                           $.mobile.hidePageLoadingMsg(); 
+                        $("#prop").append(uno).listview('refresh');
+                         });
+                        
+                     });
+                     
+        });//Termino de Notificaciones
         
         $("#cerrar").click(function(){
             window.localStorage.clear();
@@ -45,7 +169,7 @@
 				
                 if (response == false) {
                     alert("Error usuario o contraseña erroneos");
-                    logIcon("false");
+                    $.mobile.hidePageLoadingMsg(); 
                 }
                 else {
                     
@@ -55,39 +179,21 @@
                     window.location = "#page3";
                     $('#nombre').html(window.localStorage.getItem("nombre"));
                     id = window.localStorage.getItem("id");
-                    setInterval(function(){
-                        
-                    $("#notify").empty();
-                    $.getJSON("http://tcommdev.tesconmedia.com/server.php/mensajes/contenido/"+id, function(data){
-                        
-                        $.each(data, function(i,item){
-                           var ii = i+1; 
-                           var idn = item.id;
-                           var uno = $('<li />').attr("data-theme","c").attr("data-filtertext"," "+item.mensaje).appendTo("#notify");
-                           var dos = $("<a />").attr("data-transition","slide").html(item.nombre).appendTo(uno).on('click',function(){
-                            $("#nombren").html(item.nombre);
-                            $("#nombrep").html(item.nombre);
-                            $("#fecha").html(item.fecha);
-                            $("#cuerpo").html(item.mensaje);
-
-                        }).attr("href","#page9");
-                           var tres = $("<span />").attr("class","ui-li-count").html(item.mensaje).appendTo(dos);
-
-                         });
-                        
-                     }); //Termina el gate
-                     },2000).done(function(){
-            $("#notify").trigger("create");
-            });
+                    $('#idUsuario').attr('value', id);
+                    
                 }
 
                 
-            }, 'json').done(function(){
-            $("#notify").trigger("create");
-            });
+            }, 'json');
             
             return false;
         });
+        
+       
+        
+        function Empleados(){
+        
+        };//Termino de Empleados
     });
 </script>
   <!-- User-generated js -->
@@ -221,13 +327,18 @@
                   </a>
               </li>
               <li data-theme="c">
-                  <a href="#page8" data-transition="slide">
+                  <a class="btn_notify" href="#page8" data-transition="slide">
                       Notificaciones
                   </a>
               </li>
               <li data-theme="c">
-                  <a href="#page5" data-transition="slide">
+                  <a class="btn_employ" href="#page5" data-transition="slide">
                       Empleados
+                  </a>
+              </li>
+              <li data-theme="c">
+                  <a class="btn_prop" href="#propiedades" data-transition="slide">
+                      Unidades móviles
                   </a>
               </li>
           </ul>
@@ -240,7 +351,7 @@
   <!-- Buscar empleados -->
   <div data-role="page" id="page5">
       <div data-theme="c" data-role="header" data-position="fixed">
-          <a data-role="button" href="#page1" data-icon="home" data-iconpos="notext"
+          <a data-role="button" href="#page3" data-icon="home" data-iconpos="notext"
           class="ui-btn-right">
               Button
           </a>
@@ -253,57 +364,12 @@
           </h5>
       </div>
       <div data-role="content">
-          <div data-role="fieldcontain">
-              <fieldset data-role="controlgroup" data-mini="true">
-                  <label for="searchinput1">
-                      Buscar empleado
-                  </label>
-                  <input name="" id="searchinput1" placeholder="" value="" type="search">
-              </fieldset>
-          </div>
-          <div>
-              <p>
-                  <b>
-                      Resultados:
-                  </b>
-              </p>
-          </div>
-          <ul data-role="listview" data-divider-theme="b" data-inset="false">
-              <li data-theme="c">
-                  <a href="#page6" data-transition="slide">
-                      Empleado 1
-                  </a>
-              </li>
-              <li data-theme="c">
-                  <a href="#page6" data-transition="slide">
-                      Empleado 2
-                  </a>
-              </li>
-              <li data-theme="c">
-                  <a href="#page6" data-transition="slide">
-                      Empleado 3
-                  </a>
-              </li>
-              <li data-theme="c">
-                  <a href="#page6" data-transition="slide">
-                      Empleado 4
-                  </a>
-              </li>
-              <li data-theme="c">
-                  <a href="#page6" data-transition="slide">
-                      Empleado 5
-                  </a>
-              </li>
-              <li data-theme="c">
-                  <a href="#page6" data-transition="slide">
-                      Empleado 6
-                  </a>
-              </li>
-              <li data-theme="c">
-                  <a href="#page6" data-transition="slide">
-                      Empleado 7
-                  </a>
-              </li>
+          <a class="btn_employ" data-role="button" href="#">
+              Actualizar lista
+          </a>
+          <br>
+          <ul id="ls_employs"  data-role="listview" data-filter="true" data-divider-theme="b" data-inset="false">
+              
           </ul>
       </div>
   </div>
@@ -318,8 +384,8 @@
           class="ui-btn-left">
               Volver
           </a>
-          <h3>
-              Empleado XXX
+          <h3 id="nomemp">
+              
           </h3>
           <div style=" text-align:center">
               <img style="width: 128px; height: 128px" src="http://tcommdev.tesconmedia.com/img/nopicture.png">
@@ -331,7 +397,7 @@
                   <b>
                       Nombre:&nbsp;
                   </b>
-                  Fernando Ulises Medrano Hernández
+                  <span id="nomempf"></span>
               </p>
           </div>
           <div>
@@ -342,7 +408,7 @@
                       </strong>
                       &nbsp;
                   </label>
-                  524494421400 ext / 524494421400
+                  <span id="tel"></span>
               </div>
           </div>
           <div>
@@ -352,7 +418,7 @@
                           Correo Electrónico:&nbsp;
                       </label>
                   </strong>
-                  drbyde@gmail.com
+                  <span id="mailem"></span>
               </div>
           </div>
           <div>
@@ -362,7 +428,7 @@
                           Dirección:&nbsp;
                       </label>
                   </strong>
-                  Calle Paseo San Gerardo No. 207.
+                  <span id="diremp"></span>
               </div>
           </div>
           <div>
@@ -372,7 +438,7 @@
                           Fecha de nacimiento:&nbsp;
                       </label>
                   </strong>
-                  1986-01-10
+                  <span id="datemp"></span>
               </div>
           </div>
       </div>
@@ -442,6 +508,10 @@
           </h3>
       </div>
       <div data-role="content">
+          <a class="btn_notify" data-role="button" href="#">
+              Actualizar
+          </a>
+          <br>
           <ul id="notify" data-role="listview" data-filter="true" data-divider-theme="b" data-inset="false">
               
           </ul>
@@ -454,7 +524,7 @@
           class="ui-btn-right">
               Button
           </a>
-          <a data-role="button" href="#page8" data-icon="arrow-l" data-iconpos="left"
+          <a class="btn_notify" data-role="button" href="#page8" data-icon="arrow-l" data-iconpos="left"
           class="ui-btn-left">
               Volver
           </a>
@@ -693,6 +763,151 @@
       </div>
   </div>
 
+  
+  
+    <!-- propiedades0 -->
+  <div data-role="page" id="propiedades">
+      <div data-theme="c" data-role="header">
+          <a data-role="button" href="#page3" data-icon="home" data-iconpos="notext"
+          class="ui-btn-right">
+              Button
+          </a>
+          <a data-role="button" href="#page3" data-icon="arrow-l" data-iconpos="left"
+          class="ui-btn-left">
+              Volver
+          </a>
+          <h3>
+              Unidades
+          </h3>
+          <h3>
+              Moviles
+          </h3>
+      </div>
+      <div data-role="content">
+          <ul id="prop" data-role="listview"  data-filter="true" data-divider-theme="b" data-inset="false">
+              
+          </ul>
+      </div>
+      <div data-role="tabbar" data-iconpos="top" data-theme="c">
+          <ul>
+              <li>
+                  <a class="btn_prop" href="#propiedades" data-transition="fade" data-theme="" data-icon="search">
+                      Consultar
+                  </a>
+              </li>
+              <li>
+                  <a href="#agregar" data-transition="fade" data-theme="" data-icon="plus">
+                      Agregar
+                  </a>
+              </li>
+          </ul>
+      </div>
+  </div>
+  <!-- agregar -->
+  <div data-role="page" id="agregar">
+      <div data-theme="c" data-role="header">
+          <a data-role="button" href="#page3" data-icon="home" data-iconpos="notext"
+          class="ui-btn-right">
+              Button
+          </a>
+          <a data-role="button" href="#page3" data-icon="arrow-l" data-iconpos="left"
+          class="ui-btn-left">
+              Volver
+          </a>
+          <h3>
+              Agregar
+          </h3>
+          <h2>
+              Unidad Movil
+          </h2>
+      </div>
+      <div data-role="content">
+          <form id="propiedad">
+              <input name="idUsuario" id="idUsuario" placeholder="idUsuario" 
+                  value="" type="hidden">
+              <div data-role="fieldcontain" id="descripcionMovil">
+                  <label for="descripcionMovil">
+                      Descripcion
+                  </label>
+                  <input name="descripcionMovil" id="descripcionMovil" placeholder="Descripcion"
+                  value="" type="text">
+              </div>
+              <div data-role="fieldcontain" id="placas">
+                  <label for="placas">
+                      Placa
+                  </label>
+                  <input name="placas" id="placas" placeholder="Placa" value="" type="text">
+              </div>
+              <input id="enviar" type="submit" data-inline="true" data-theme="d" data-icon="plus"
+              data-iconpos="bottom" value="Agregar">
+          </form>
+      </div>
+      <div data-role="tabbar" data-iconpos="top" data-theme="c">
+          <ul>
+              <li>
+                  <a class="btn_prop" href="#propiedades" data-transition="fade" data-theme="" data-icon="search">
+                      Consultar
+                  </a>
+              </li>
+              <li>
+                  <a href="#agregar" data-transition="fade" data-theme="" data-icon="plus">
+                      Agregar
+                  </a>
+              </li>
+          </ul>
+      </div>
+  </div>
+  <!-- detalles -->
+  <div data-role="page" id="detalles">
+      <div data-theme="c" data-role="header">
+          <a data-role="button" href="#page3" data-icon="home" data-iconpos="notext"
+          class="ui-btn-right">
+              Inicio
+          </a>
+          <a class="" data-role="button" href="#propiedades" data-icon="arrow-l" data-iconpos="left"
+          class="ui-btn-left">
+              Volver
+          </a>
+          <h3 id="propn">
+              
+          </h3>
+
+      </div>
+      <div data-role="content">
+          <div>
+              <p>
+                  <strong>
+                      Placa:&nbsp;
+                  </strong>
+                  <span id="propplac"></span>
+              </p>
+          </div>
+          <div>
+              <p>
+                  <b>
+                      Descripcion:
+                  </b>
+                  <span id="_mce_caret" data-mce-bogus="true" style="">
+                      <span id="propdes"></span>
+                  </span>
+              </p>
+          </div>
+      </div>
+      <div data-role="tabbar" data-iconpos="top" data-theme="c">
+          <ul>
+              <li>
+                  <a href="#propiedades" data-transition="fade" data-theme="c" data-icon="search">
+                      Consultar
+                  </a>
+              </li>
+              <li>
+                  <a href="#agregar" data-transition="fade" data-theme="c" data-icon="plus">
+                      Agregar
+                  </a>
+              </li>
+          </ul>
+      </div>
+  </div>
   
 </body>
 </html>
