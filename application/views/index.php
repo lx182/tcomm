@@ -18,6 +18,7 @@
   </style>
   
   <script>
+      var id;
     function logIcon(confirmar) {
         $.mobile.loading('show', {
             text: 'Inciando sesión ...',
@@ -29,11 +30,12 @@
     }
 
     $(function () {
-
+        
         $("#cerrar").click(function(){
             window.localStorage.clear();
             
         });
+        
         $("#login").submit(function () {
 
             logIcon("true");
@@ -53,17 +55,30 @@
                     window.location = "#page3";
                     $('#nombre').html(window.localStorage.getItem("nombre"));
                     id = window.localStorage.getItem("id");
+                    setInterval(function(){
+                        
+                    $("#notify").empty();
                     $.getJSON("http://tcommdev.tesconmedia.com/server.php/mensajes/contenido/"+id, function(data){
-                        alert("Worl");
+                        
                         $.each(data, function(i,item){
                            var ii = i+1; 
-                           var uno = $('<li />').attr("data-theme","c").attr("data-filtertext",item.mensaje).appendTo("#notify");
-                           var dos = $("<a />").attr("data-transition","slide").attr("href","#page9").html(item.nombre).appendTo(uno);
+                           var idn = item.id;
+                           var uno = $('<li />').attr("data-theme","c").attr("data-filtertext"," "+item.mensaje).appendTo("#notify");
+                           var dos = $("<a />").attr("data-transition","slide").html(item.nombre).appendTo(uno).on('click',function(){
+                            $("#nombren").html(item.nombre);
+                            $("#nombrep").html(item.nombre);
+                            $("#fecha").html(item.fecha);
+                            $("#cuerpo").html(item.mensaje);
+
+                        }).attr("href","#page9");
                            var tres = $("<span />").attr("class","ui-li-count").html(item.mensaje).appendTo(dos);
 
                          });
                         
-                     });
+                     }); //Termina el gate
+                     },2000).done(function(){
+            $("#notify").trigger("create");
+            });
                 }
 
                 
@@ -427,30 +442,8 @@
           </h3>
       </div>
       <div data-role="content">
-          <div data-role="fieldcontain">
-              <fieldset data-role="controlgroup">
-                  <label for="searchinput2">
-                  </label>
-                  <input name="" id="searchinput2" placeholder="Buscar notificaciones" value=""
-                  type="search">
-              </fieldset>
-          </div>
-          <div>
-              <p>
-                  <b>
-                      Recientes:
-                  </b>
-              </p>
-          </div>
-          <ul id="notify" data-role="listview" data-divider-theme="b" data-inset="false">
-              <li data-theme="c">
-                  <a href="#page9" data-transition="slide">
-                      Notificación 1
-                      <span class="ui-li-count">
-                          Junta mañana en casa de...
-                      </span>
-                  </a>
-              </li>
+          <ul id="notify" data-role="listview" data-filter="true" data-divider-theme="b" data-inset="false">
+              
           </ul>
       </div>
   </div>
@@ -465,8 +458,8 @@
           class="ui-btn-left">
               Volver
           </a>
-          <h3>
-              Notificación X
+          <h3 id="nombren">
+              
           </h3>
           <div style=" text-align:center">
               <img style="width: 20%; height: 20%" src="http://images1.wikia.nocookie.net/__cb20101024140345/ratchetandclank/es/images/2/2a/Alerta_Azul.png">
@@ -477,16 +470,7 @@
                       <b>
                           De:
                       </b>
-                      Administrador
-                  </span>
-              </p>
-          </div>
-          <div>
-              <p>
-                  <span style="font-size: small;">
-                      <b>
-                          Asunto: Reunion de comite general
-                      </b>
+                      <span id="nombrep"></span>
                   </span>
               </p>
           </div>
@@ -496,7 +480,7 @@
                       <b>
                           Fecha:
                       </b>
-                      26 de marzo de 2012
+                      <span id ="fecha"></span>
                   </span>
               </p>
           </div>
@@ -508,9 +492,8 @@
                       Cuerpo:
                   </b>
               </p>
-              <p style="text-align: justify;">
-                  Por medio de la presente doy el anuncio &nbsp;de el dia 30 de abril se
-                  llevara acabo una reunion e comite general para todos los miembros de este.
+              <p id="cuerpo" style="text-align: justify;">
+                  
               </p>
           </div>
       </div>
